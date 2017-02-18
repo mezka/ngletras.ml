@@ -37914,6 +37914,17 @@ function HomeController($scope, $log, MainService, $sanitize) {
           }
         );
     };
+
+
+    $scope.getSongs = function(artist){
+      MainService.getSongs(artist).then(
+        function(data){
+            if(response.numfound !== 0){
+              
+            }
+        }
+      )
+    }
 }
 
 
