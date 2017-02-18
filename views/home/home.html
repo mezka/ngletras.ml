@@ -1,0 +1,9 @@
+<h1>Search for Lyrics</h1>
+
+<form>
+  <input type="text" ng-model="search.artist" placeholder="Artist">
+  <input type="text" ng-model="search.song" placeholder="Song">
+  <input id="submit" type="submit" name="Search" value="Submit" ng-click = "getLyrics(search.artist, search.song)">
+</form>
+
+<p ng-bind-html="searchOutcome"></p>
