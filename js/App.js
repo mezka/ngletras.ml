@@ -1,4 +1,4 @@
-var App = angular.module('App', ['ui.router', 'ngSanitize']);
+var App = angular.module('App', ['ui.router']);
 
 App.config(
 
@@ -7,26 +7,32 @@ function($stateProvider, $urlRouterProvider){
   var homeState = {
     name: 'home',
     url: '/',
-    templateUrl: './views/home/home.html',
-    controller: 'HomeController'
+    templateUrl: './views/home/home.html'
   };
 
-  var songFound = {
+  var songFoundState = {
     name: 'song',
-    url: '/song:searchObj',
+    url: '/song',
+    params: {searchObj: null},
     templateUrl: './views/song/song.html',
     controller: 'SongController'
   };
 
-  var lyricsFound = {
+  var lyricsFoundState = {
     name: 'lyrics',
     url: '/lyrics',
     templateUrl: './views/lyrics/lyrics.html'
   };
 
-  $stateProvider.state(homeState);
-  $stateProvider.state(songFound);
-  $stateProvider.state(lyricsFound);
-
   $urlRouterProvider.when('', '/');
+  $urlRouterProvider.otherwise('/404');
+
+  $stateProvider.state(homeState);
+  $stateProvider.state(songFoundState);
+  $stateProvider.state(lyricsFoundState);
 });
+
+
+App.config(['$qProvider', function ($qProvider) {
+    $qProvider.errorOnUnhandledRejections(false);
+}]);

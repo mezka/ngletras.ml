@@ -37816,7 +37816,7 @@ angular.module('ui.router.state')
   .filter('isState', $IsStateFilter)
   .filter('includedByState', $IncludedByStateFilter);
 })(window, window.angular);
-var App = angular.module('App', ['ui.router', 'ngSanitize']);
+var App = angular.module('App', ['ui.router']);
 
 App.config(
 
@@ -37825,78 +37825,39 @@ function($stateProvider, $urlRouterProvider){
   var homeState = {
     name: 'home',
     url: '/',
-    templateUrl: './views/home/home.html',
-    controller: 'HomeController'
+    templateUrl: './views/home/home.html'
   };
 
-  var songFound = {
+  var songFoundState = {
     name: 'song',
-    url: '/song:searchObj',
+    url: '/song',
+    params: {searchObj: null},
     templateUrl: './views/song/song.html',
     controller: 'SongController'
   };
 
-  var lyricsFound = {
+  var lyricsFoundState = {
     name: 'lyrics',
     url: '/lyrics',
     templateUrl: './views/lyrics/lyrics.html'
   };
 
-  $stateProvider.state(homeState);
-  $stateProvider.state(songFound);
-  $stateProvider.state(lyricsFound);
-
   $urlRouterProvider.when('', '/');
+  $urlRouterProvider.otherwise('/404');
+
+  $stateProvider.state(homeState);
+  $stateProvider.state(songFoundState);
+  $stateProvider.state(lyricsFoundState);
 });
 
-function MainService($http, $log) {
 
-    this.getData = function(query) {
-        return $http({
-            method: 'GET',
-            url: 'https://api.vagalume.com.br/' + query + '&apikey={68372f035a4d545c305c57647c620ffc}'
-        }).then(function(response) {
-            if (response.status === 200) {
-                $log.log('Got 200, going to log response.data:\n', response.data);
-                $log.log(response);
-                return response.data;
-            } else {
-                $log.log('Something went wrong, going to log response.status:\n\n', response.status);
-                $log.log('\n\nNow logging response.data:\n', response.data);
-            }
-        });
-    };
+App.config(['$qProvider', function ($qProvider) {
+    $qProvider.errorOnUnhandledRejections(false);
+}]);
 
+function MainController($scope, $state, MainService) {
 
-    this.queryMaker = function(artist, song, type, limit){
-
-      function htmlEncode(s) {
-          var el = document.createElement("div");
-          el.innerText = el.textContent = s;
-          s = el.innerHTML;
-          return s;
-      }
-
-
-      artist = htmlEncode(artist);
-      song = htmlEncode(song);
-
-      switch(type){
-        case 'excerpt':
-          return 'search.excerpt?q=' + song + '&limit=' + limit;
-        case 'artistMusic':
-          return 'search.artmus?q=' + artist + '&limit=' + limit;
-        case 'lyrics':
-          return 'search.php?art=' + artist + '&mus=' + song;
-      }
-    };
-}
-
-angular.module('App').service('MainService', MainService);
-
-function HomeController($scope, $log, MainService, $sanitize, $state) {
-
-    $log.log('Loading HomeController ...');
+    console.log('Loading MainController ...');
 
     $scope.artist = '';
     $scope.song = '';
@@ -37905,42 +37866,96 @@ function HomeController($scope, $log, MainService, $sanitize, $state) {
         $state.go(stateStr, stateObj);
     };
 
-    var queryMaker = MainService.queryMaker;
-
     $scope.searchMessage = '';
-    var searchObj = '';
 
     $scope.search = function(artist, song) {
+
         if (!song) {
             if (!artist)
                 $scope.searchMessage = "Your query was empty, try again";
             else {
-                getData(queryMaker(artist, song, 'artistMusic', 10));
-                $log.log("Logging searchObj" + searchObj);
-                changeState('song', searchObj);
+                  console.log('Trying to get data');
+                  MainService.getArtistSongs(artist, song).then(
+                    function(data) {
+                        console.log('Works!');
+                        changeState('/song', {
+                            searchObj: data
+                        });
+                    }
+                );
             }
         }
     };
 
-
-
-
-    var getData = function(artist, song, query) {
-
-        MainService.getData(artist, song, query).then(
-            function(data) {
-                if (data.type === 'song_notfound')
-                    $scope.searchMessage = 'Sorry, the song was not found for that artist.';
-                else
-                    searchObj = data;
-                    $log.log('Succesfully received data ...');
-            }
-        );
-    };
 }
 
+App.controller('MainController', MainController);
 
-App.controller('HomeController', HomeController);
+function MainService($http, $log) {
+
+    var limit = 10;
+
+    function htmlEncode(s) {
+        var el = document.createElement("div");
+        el.innerText = el.textContent = s;
+        s = el.innerHTML;
+        return s;
+    }
+
+
+    this.getLyrics = function(artist, song){
+
+      artist = htmlEncode(artist);
+      song = htmlEncode(song);
+
+
+      return $http({
+          method: 'GET',
+          url: 'https://api.vagalume.com.br/' + 'search.php?art=' + artist + '&mus=' + song + '&apikey={68372f035a4d545c305c57647c620ffc}'
+      }).then(function(response) {
+          if (response.status === 200)
+              return response;
+          else
+            console.log("getLyrics failed, logging response.status: ", response.status);
+      });
+    };
+
+    this.getArtistSongs = function(artist, song){
+
+      artist = htmlEncode(artist);
+      song = htmlEncode(song);
+
+      return $http({
+          method: 'GET',
+          url: 'https://api.vagalume.com.br/search.artmus?q=' + artist
+      }).then(function(response) {
+          if (response.status === 200){
+              console.log(response.data);
+              return response.data;
+          }else
+            console.log("getArtistSongs failed, logging response.status: ", response.status);
+      });
+    };
+
+    this.getSongsByTitleOrExcerpt = function(artist, song){
+
+      artist = htmlEncode(artist);
+      song = htmlEncode(song);
+
+      return $http({
+          method: 'GET',
+          url: 'https://api.vagalume.com.br/' + 'search.excerpt?q=' + song + '&limit=5'
+      }).then(function(response) {
+          if (response.status === 200)
+              return response.data;
+          else
+            console.log("getSongsByTitleOrExcerpt failed, logging response.status: ", response.status);
+      });
+    };
+
+}
+
+angular.module('App').service('MainService', MainService);
 
 function SongController($scope, $stateParams, $log){
   $log.log('Loading SongController...');
