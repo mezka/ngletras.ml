@@ -1,8 +1,5 @@
 <h1>Song View</h1>
 
-<!-- <div class="song" ng-repeat = "song in searchObj.response.docs">
-  <p>{{song.band}}</p>
-  <a>{{song.title}}</a>
+<div class="song" ng-repeat ="song in songs">
+  <div class="band">{{song.band}}</div><a ui-sref="lyrics({band: song.band, title: song.title})" class="title">{{song.title}}</a>
 </div>
-
-<button ng-click="showParams()">Show Params</button> -->

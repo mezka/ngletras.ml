@@ -2,18 +2,17 @@ function MainService($http, $log) {
 
     var limit = 10;
 
-    function htmlEncode(s) {
+    this.htmlEncode = function htmlEncode(s) {
         var el = document.createElement("div");
         el.innerText = el.textContent = s;
         s = el.innerHTML;
         return s;
-    }
-
+    };
 
     this.getLyrics = function(artist, song){
 
-      artist = htmlEncode(artist);
-      song = htmlEncode(song);
+      artist = this.htmlEncode(artist);
+      song = this.htmlEncode(song);
 
 
       return $http({
@@ -21,7 +20,7 @@ function MainService($http, $log) {
           url: 'https://api.vagalume.com.br/' + 'search.php?art=' + artist + '&mus=' + song + '&apikey={68372f035a4d545c305c57647c620ffc}'
       }).then(function(response) {
           if (response.status === 200)
-              return response;
+              return response.data;
           else
             console.log("getLyrics failed, logging response.status: ", response.status);
       });
@@ -29,8 +28,8 @@ function MainService($http, $log) {
 
     this.getArtistSongs = function(artist, song){
 
-      artist = htmlEncode(artist);
-      song = htmlEncode(song);
+      artist = this.htmlEncode(artist);
+      song = this.htmlEncode(song);
 
       return $http({
           method: 'GET',
@@ -46,8 +45,8 @@ function MainService($http, $log) {
 
     this.getSongsByTitleOrExcerpt = function(artist, song){
 
-      artist = htmlEncode(artist);
-      song = htmlEncode(song);
+      artist = this.htmlEncode(artist);
+      song = this.htmlEncode(song);
 
       return $http({
           method: 'GET',

@@ -37820,38 +37820,45 @@ var App = angular.module('App', ['ui.router']);
 
 App.config(
 
-function($stateProvider, $urlRouterProvider){
+    function($stateProvider, $urlRouterProvider) {
 
-  var homeState = {
-    name: 'home',
-    url: '/',
-    templateUrl: './views/home/home.html'
-  };
+        var homeState = {
+            name: 'home',
+            url: '/',
+            templateUrl: './views/home/home.html'
+        };
 
-  var songFoundState = {
-    name: 'song',
-    url: '/song',
-    params: {searchObj: null},
-    templateUrl: './views/song/song.html',
-    controller: 'SongController'
-  };
+        var songFoundState = {
+            name: 'song',
+            url: '/song',
+            params: {
+                searchObj: null
+            },
+            templateUrl: './views/song/song.html',
+            controller: 'SongController'
+        };
 
-  var lyricsFoundState = {
-    name: 'lyrics',
-    url: '/lyrics',
-    templateUrl: './views/lyrics/lyrics.html'
-  };
+        var lyricsFoundState = {
+            name: 'lyrics',
+            url: '/lyrics',
+            params: {
+                band: null,
+                title: null
+            },
+            templateUrl: './views/lyrics/lyrics.html',
+            controller: 'LyricsController'
+        };
 
-  $urlRouterProvider.when('', '/');
-  $urlRouterProvider.otherwise('/404');
+        $urlRouterProvider.when('', '/');
+        $urlRouterProvider.otherwise('/404');
 
-  $stateProvider.state(homeState);
-  $stateProvider.state(songFoundState);
-  $stateProvider.state(lyricsFoundState);
-});
+        $stateProvider.state(homeState);
+        $stateProvider.state(songFoundState);
+        $stateProvider.state(lyricsFoundState);
+    });
 
 
-App.config(['$qProvider', function ($qProvider) {
+App.config(['$qProvider', function($qProvider) {
     $qProvider.errorOnUnhandledRejections(false);
 }]);
 
@@ -37878,7 +37885,7 @@ function MainController($scope, $state, MainService) {
                   MainService.getArtistSongs(artist, song).then(
                     function(data) {
                         console.log('Works!');
-                        changeState('/song', {
+                        changeState('song', {
                             searchObj: data
                         });
                     }
@@ -37957,11 +37964,21 @@ function MainService($http, $log) {
 
 angular.module('App').service('MainService', MainService);
 
+function LyricsController($scope, $stateParams){
+  console.log('Loading LyricsController...');
+  console.log($stateParams);
+}
+
+App.controller('LyricsController', LyricsController);
+
 function SongController($scope, $stateParams, $log){
   $log.log('Loading SongController...');
 
+  $scope.songs = $stateParams.searchObj.response.docs;
+
   $scope.showParams = function(){
-    $log.log($stateParams);
+    $log.log($stateParams.searchObj.response.docs);
+
   };
 }
 
