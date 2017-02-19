@@ -26,14 +26,13 @@ function MainService($http, $log) {
       });
     };
 
-    this.getArtistSongs = function(artist, song){
+    this.getArtistSongs = function(artist){
 
       artist = this.htmlEncode(artist);
-      song = this.htmlEncode(song);
 
       return $http({
           method: 'GET',
-          url: 'https://api.vagalume.com.br/search.artmus?q=' + artist
+          url: 'https://api.vagalume.com.br/search.artmus?q=' + artist + '&limit=10'
       }).then(function(response) {
           if (response.status === 200){
               console.log(response.data);
@@ -43,14 +42,13 @@ function MainService($http, $log) {
       });
     };
 
-    this.getSongsByTitleOrExcerpt = function(artist, song){
+    this.getSongsByTitleOrExcerpt = function(song){
 
-      artist = this.htmlEncode(artist);
       song = this.htmlEncode(song);
 
       return $http({
           method: 'GET',
-          url: 'https://api.vagalume.com.br/' + 'search.excerpt?q=' + song + '&limit=5'
+          url: 'https://api.vagalume.com.br/' + 'search.excerpt?q=' + song + '&limit=10'
       }).then(function(response) {
           if (response.status === 200)
               return response.data;

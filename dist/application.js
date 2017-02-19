@@ -37832,7 +37832,8 @@ App.config(
             name: 'song',
             url: '/song',
             params: {
-                searchObj: null
+                band: null,
+                title: null
             },
             templateUrl: './views/song/song.html',
             controller: 'SongController'
@@ -37866,8 +37867,10 @@ function MainController($scope, $state, MainService) {
 
     console.log('Loading MainController ...');
 
-    $scope.artist = '';
-    $scope.song = '';
+    $scope.searchObj = {
+        band: '',
+        title: ''
+    };
 
     var changeState = function(stateStr, stateObj) {
         $state.go(stateStr, stateObj);
@@ -37877,24 +37880,26 @@ function MainController($scope, $state, MainService) {
 
     $scope.search = function(artist, song) {
 
-        if (!song) {
-            if (!artist)
-                $scope.searchMessage = "Your query was empty, try again";
-            else {
-                  console.log('Trying to get data');
-                  MainService.getArtistSongs(artist, song).then(
-                    function(data) {
-                        console.log('Works!');
-                        changeState('song', {
-                            searchObj: data
-                        });
-                    }
-                );
-            }
+        if (!artist && !song) {
+            $scope.searchMessage = "Your query was empty, try again";
+        } else if (artist && song) {
+            changeState('lyrics', {
+                band: artist,
+                title: song
+            });
+        } else {
+            changeState('song', {
+                band: artist,
+                title: song
+            });
         }
     };
 
+
 }
+
+
+
 
 App.controller('MainController', MainController);
 
@@ -37902,18 +37907,17 @@ function MainService($http, $log) {
 
     var limit = 10;
 
-    function htmlEncode(s) {
+    this.htmlEncode = function htmlEncode(s) {
         var el = document.createElement("div");
         el.innerText = el.textContent = s;
         s = el.innerHTML;
         return s;
-    }
-
+    };
 
     this.getLyrics = function(artist, song){
 
-      artist = htmlEncode(artist);
-      song = htmlEncode(song);
+      artist = this.htmlEncode(artist);
+      song = this.htmlEncode(song);
 
 
       return $http({
@@ -37921,16 +37925,16 @@ function MainService($http, $log) {
           url: 'https://api.vagalume.com.br/' + 'search.php?art=' + artist + '&mus=' + song + '&apikey={68372f035a4d545c305c57647c620ffc}'
       }).then(function(response) {
           if (response.status === 200)
-              return response;
+              return response.data;
           else
             console.log("getLyrics failed, logging response.status: ", response.status);
       });
     };
 
-    this.getArtistSongs = function(artist, song){
+    this.getArtistSongs = function(artist){
 
-      artist = htmlEncode(artist);
-      song = htmlEncode(song);
+      artist = this.htmlEncode(artist);
+      song = this.htmlEncode(song);
 
       return $http({
           method: 'GET',
@@ -37944,10 +37948,10 @@ function MainService($http, $log) {
       });
     };
 
-    this.getSongsByTitleOrExcerpt = function(artist, song){
+    this.getSongsByTitleOrExcerpt = function(song){
 
-      artist = htmlEncode(artist);
-      song = htmlEncode(song);
+      artist = this.htmlEncode(artist);
+      song = this.htmlEncode(song);
 
       return $http({
           method: 'GET',
@@ -37964,22 +37968,33 @@ function MainService($http, $log) {
 
 angular.module('App').service('MainService', MainService);
 
-function LyricsController($scope, $stateParams){
-  console.log('Loading LyricsController...');
-  console.log($stateParams);
+function LyricsController($scope, $stateParams, MainService) {
+    console.log('Loading LyricsController...');
+    console.log($stateParams);
+
+    $scope.lyricsObj = $stateParams;
+
+    MainService.getLyrics($stateParams.band, $stateParams.title).then(function(data) {
+        console.log('Got data: ' + data.mus[0].text);
+        $scope.lyricsObj.text = data.mus[0].text;
+    });
+
 }
 
 App.controller('LyricsController', LyricsController);
 
-function SongController($scope, $stateParams, $log){
-  $log.log('Loading SongController...');
+function SongController($scope, $stateParams, MainService){
+  console.log('Loading SongController...');
 
-  $scope.songs = $stateParams.searchObj.response.docs;
+  console.log($stateParams);
 
-  $scope.showParams = function(){
-    $log.log($stateParams.searchObj.response.docs);
+  if($stateParams.band){
+    MainService.getArtistSongs($stateParams.band).then(function(data){
+      console.log(data);
+    });
+  }
 
-  };
+
 }
 
 

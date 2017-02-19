@@ -2,8 +2,14 @@ function MainController($scope, $state, MainService) {
 
     console.log('Loading MainController ...');
 
-    $scope.artist = '';
-    $scope.song = '';
+    $scope.searchObj = {
+        band: '',
+        title: '',
+        clear: function(){
+          this.band = '';
+          this.title = '';
+        }
+    };
 
     var changeState = function(stateStr, stateObj) {
         $state.go(stateStr, stateObj);
@@ -13,23 +19,27 @@ function MainController($scope, $state, MainService) {
 
     $scope.search = function(artist, song) {
 
-        if (!song) {
-            if (!artist)
-                $scope.searchMessage = "Your query was empty, try again";
-            else {
-                  console.log('Trying to get data');
-                  MainService.getArtistSongs(artist, song).then(
-                    function(data) {
-                        console.log('Works!');
-                        changeState('song', {
-                            searchObj: data
-                        });
-                    }
-                );
-            }
+        $scope.searchObj.clear();
+
+        if (!artist && !song) {
+            $scope.searchMessage = "Your query was empty, try again";
+        } else if (artist && song) {
+            changeState('lyrics', {
+                band: artist,
+                title: song
+            });
+        } else {
+            changeState('song', {
+                band: artist,
+                title: song
+            });
         }
     };
 
+
 }
+
+
+
 
 App.controller('MainController', MainController);

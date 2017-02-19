@@ -14,7 +14,8 @@ App.config(
             name: 'song',
             url: '/song',
             params: {
-                searchObj: null
+                band: null,
+                title: null
             },
             templateUrl: './views/song/song.html',
             controller: 'SongController'

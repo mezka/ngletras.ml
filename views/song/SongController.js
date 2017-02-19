@@ -1,12 +1,19 @@
-function SongController($scope, $stateParams, $log){
-  $log.log('Loading SongController...');
+function SongController($scope, $stateParams, MainService){
+  console.log('Loading SongController...');
 
-  $scope.songs = $stateParams.searchObj.response.docs;
+  console.log($stateParams);
 
-  $scope.showParams = function(){
-    $log.log($stateParams.searchObj.response.docs);
-
-  };
+  if($stateParams.band){
+    MainService.getArtistSongs($stateParams.band).then(function(data){
+      console.log(data);
+      $scope.songs = data.response.docs;
+    });
+  }else {
+    MainService.getSongsByTitleOrExcerpt($stateParams.title).then(function(data){
+      console.log(data);
+      $scope.songs = data.response.docs;
+    });
+  }
 }
 
 
