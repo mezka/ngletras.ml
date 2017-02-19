@@ -11,10 +11,11 @@ function($stateProvider, $urlRouterProvider){
     controller: 'HomeController'
   };
 
-  var songsFound = {
-    name: 'songs',
-    url: '/songs',
-    templateUrl: './views/songs/songs.html'
+  var songFound = {
+    name: 'song',
+    url: '/song:searchObj',
+    templateUrl: './views/song/song.html',
+    controller: 'SongController'
   };
 
   var lyricsFound = {
@@ -24,6 +25,8 @@ function($stateProvider, $urlRouterProvider){
   };
 
   $stateProvider.state(homeState);
+  $stateProvider.state(songFound);
+  $stateProvider.state(lyricsFound);
 
   $urlRouterProvider.when('', '/');
 });

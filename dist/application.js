@@ -37829,10 +37829,11 @@ function($stateProvider, $urlRouterProvider){
     controller: 'HomeController'
   };
 
-  var songsFound = {
-    name: 'songs',
-    url: '/songs',
-    templateUrl: './views/songs/songs.html'
+  var songFound = {
+    name: 'song',
+    url: '/song:searchObj',
+    templateUrl: './views/song/song.html',
+    controller: 'SongController'
   };
 
   var lyricsFound = {
@@ -37842,16 +37843,18 @@ function($stateProvider, $urlRouterProvider){
   };
 
   $stateProvider.state(homeState);
+  $stateProvider.state(songFound);
+  $stateProvider.state(lyricsFound);
 
   $urlRouterProvider.when('', '/');
 });
 
 function MainService($http, $log) {
 
-    this.getLyrics = function(artist, song) {
+    this.getData = function(query) {
         return $http({
             method: 'GET',
-            url: 'https://api.vagalume.com.br/search.php?art=' + artist + '&mus=' + song + '&apikey={68372f035a4d545c305c57647c620ffc}'
+            url: 'https://api.vagalume.com.br/' + query + '&apikey={68372f035a4d545c305c57647c620ffc}'
         }).then(function(response) {
             if (response.status === 200) {
                 $log.log('Got 200, going to log response.data:\n', response.data);
@@ -37864,68 +37867,88 @@ function MainService($http, $log) {
         });
     };
 
-    this.getSongs = function(artist, song) {
-        return $http({
-            method: 'GET',
-            url: 'https://api.vagalume.com.br/search.php?artmus=' + artist + '&apikey={68372f035a4d545c305c57647c620ffc}'
-        }).then(function(response) {
-            if (response.status === 200) {
-                $log.log('Got 200, going to log response.data:\n', response.data);
-                $log.log(response);
-                return response.data;
-            } else {
-                $log.log('Something went wrong, going to log response.status:\n\n', response.status);
-                $log.log('\n\nNow logging response.data:\n', response.data);
-            }
-        });
-    };
 
-    this.htmlEncode = function HtmlEncode(s) {
-        var el = document.createElement("div");
-        el.innerText = el.textContent = s;
-        s = el.innerHTML;
-        return s;
+    this.queryMaker = function(artist, song, type, limit){
+
+      function htmlEncode(s) {
+          var el = document.createElement("div");
+          el.innerText = el.textContent = s;
+          s = el.innerHTML;
+          return s;
+      }
+
+
+      artist = htmlEncode(artist);
+      song = htmlEncode(song);
+
+      switch(type){
+        case 'excerpt':
+          return 'search.excerpt?q=' + song + '&limit=' + limit;
+        case 'artistMusic':
+          return 'search.artmus?q=' + artist + '&limit=' + limit;
+        case 'lyrics':
+          return 'search.php?art=' + artist + '&mus=' + song;
+      }
     };
 }
 
 angular.module('App').service('MainService', MainService);
 
-function HomeController($scope, $log, MainService, $sanitize) {
+function HomeController($scope, $log, MainService, $sanitize, $state) {
 
     $log.log('Loading HomeController ...');
 
-    $scope.search = {
-        artist: '',
-        song: ''
+    $scope.artist = '';
+    $scope.song = '';
+
+    var changeState = function(stateStr, stateObj) {
+        $state.go(stateStr, stateObj);
     };
 
-    $scope.searchOutcome = '';
+    var queryMaker = MainService.queryMaker;
 
-    $scope.getLyrics = function(artist, song) {
+    $scope.searchMessage = '';
+    var searchObj = '';
 
-        var promise = MainService.getLyrics(artist, song);
-
-        promise.then(
-          function(data){
-            if(data.type === 'song_notfound')
-              $scope.searchOutcome = 'Sorry, the song was not found. Remember that you have to search for both artist and song name';
-            else
-              $scope.searchOutcome = MainService.htmlEncode(data.mus[0].text);
-          }
-        );
-    };
-
-
-    $scope.getSongs = function(artist){
-      MainService.getSongs(artist).then(
-        function(data){
-            if(response.numfound !== 0){
-              
+    $scope.search = function(artist, song) {
+        if (!song) {
+            if (!artist)
+                $scope.searchMessage = "Your query was empty, try again";
+            else {
+                getData(queryMaker(artist, song, 'artistMusic', 10));
+                $log.log("Logging searchObj" + searchObj);
+                changeState('song', searchObj);
             }
         }
-      )
-    }
+    };
+
+
+
+
+    var getData = function(artist, song, query) {
+
+        MainService.getData(artist, song, query).then(
+            function(data) {
+                if (data.type === 'song_notfound')
+                    $scope.searchMessage = 'Sorry, the song was not found for that artist.';
+                else
+                    searchObj = data;
+                    $log.log('Succesfully received data ...');
+            }
+        );
+    };
 }
 
 
 App.controller('HomeController', HomeController);
+
+function SongController($scope, $stateParams, $log){
+  $log.log('Loading SongController...');
+
+  $scope.showParams = function(){
+    $log.log($stateParams);
+  };
+}
+
+
+App.controller('SongController', SongController);

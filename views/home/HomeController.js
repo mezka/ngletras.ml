@@ -1,38 +1,46 @@
-function HomeController($scope, $log, MainService, $sanitize) {
+function HomeController($scope, $log, MainService, $sanitize, $state) {
 
     $log.log('Loading HomeController ...');
 
-    $scope.search = {
-        artist: '',
-        song: ''
+    $scope.artist = '';
+    $scope.song = '';
+
+    var changeState = function(stateStr, stateObj) {
+        $state.go(stateStr, stateObj);
     };
 
-    $scope.searchOutcome = '';
+    var queryMaker = MainService.queryMaker;
 
-    $scope.getLyrics = function(artist, song) {
+    $scope.searchMessage = '';
+    var searchObj = '';
 
-        var promise = MainService.getLyrics(artist, song);
-
-        promise.then(
-          function(data){
-            if(data.type === 'song_notfound')
-              $scope.searchOutcome = 'Sorry, the song was not found. Remember that you have to search for both artist and song name';
-            else
-              $scope.searchOutcome = MainService.htmlEncode(data.mus[0].text);
-          }
-        );
-    };
-
-
-    $scope.getSongs = function(artist){
-      MainService.getSongs(artist).then(
-        function(data){
-            if(response.numfound !== 0){
-              
+    $scope.search = function(artist, song) {
+        if (!song) {
+            if (!artist)
+                $scope.searchMessage = "Your query was empty, try again";
+            else {
+                getData(queryMaker(artist, song, 'artistMusic', 10));
+                $log.log("Logging searchObj" + searchObj);
+                changeState('song', searchObj);
             }
         }
-      )
-    }
+    };
+
+
+
+
+    var getData = function(artist, song, query) {
+
+        MainService.getData(artist, song, query).then(
+            function(data) {
+                if (data.type === 'song_notfound')
+                    $scope.searchMessage = 'Sorry, the song was not found for that artist.';
+                else
+                    searchObj = data;
+                    $log.log('Succesfully received data ...');
+            }
+        );
+    };
 }
 
 
