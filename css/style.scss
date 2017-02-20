@@ -122,6 +122,12 @@ a:visited {
     }
 }
 /**********************************song view**********************************/
+.failMessage{
+  width: 90%;
+  margin: 20px auto 0px auto;
+  text-align: center;
+}
+
 .songWrapper {
     display: flex;
     flex-direction: column;

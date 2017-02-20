@@ -163,6 +163,25 @@ function MainService($http, $log) {
 
 angular.module('App').service('MainService', MainService);
 
+function SongController($scope, $stateParams, MainService){
+  console.log('Loading SongController...');
+
+  if($stateParams.band){
+    MainService.getArtistSongs($stateParams.band).then(function(data){
+      console.log(data);
+      $scope.songs = data.response.docs;
+    });
+  }else {
+    MainService.getSongsByTitleOrExcerpt($stateParams.title).then(function(data){
+      console.log(data);
+      $scope.songs = data.response.docs;
+    });
+  }
+}
+
+
+App.controller('SongController', SongController);
+
 function LyricsController($scope, $stateParams, MainService) {
     console.log('Loading LyricsController...');
     console.log($stateParams);
@@ -191,22 +210,3 @@ function LyricsController($scope, $stateParams, MainService) {
 }
 
 App.controller('LyricsController', LyricsController);
-
-function SongController($scope, $stateParams, MainService){
-  console.log('Loading SongController...');
-
-  if($stateParams.band){
-    MainService.getArtistSongs($stateParams.band).then(function(data){
-      console.log(data);
-      $scope.songs = data.response.docs;
-    });
-  }else {
-    MainService.getSongsByTitleOrExcerpt($stateParams.title).then(function(data){
-      console.log(data);
-      $scope.songs = data.response.docs;
-    });
-  }
-}
-
-
-App.controller('SongController', SongController);
