@@ -1,4 +1,4 @@
-function MainController($scope, $state, MainService) {
+function MainController($scope, MainService, $state) {
 
     console.log('Loading MainController ...');
 
@@ -11,8 +11,8 @@ function MainController($scope, $state, MainService) {
         }
     };
 
-    var changeState = function(stateStr, stateObj) {
-        $state.go(stateStr, stateObj);
+    var changeState = function(stateName, stateParams) {
+        $state.go(stateName, stateParams);
     };
 
     $scope.searchMessage = '';

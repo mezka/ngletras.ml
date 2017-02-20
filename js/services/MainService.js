@@ -1,6 +1,6 @@
 function MainService($http, $log) {
 
-    var limit = 10;
+    this.lastState = {link: '/', params: null};
 
     this.htmlEncode = function htmlEncode(s) {
         var el = document.createElement("div");
@@ -55,6 +55,15 @@ function MainService($http, $log) {
           else
             console.log("getSongsByTitleOrExcerpt failed, logging response.status: ", response.status);
       });
+    };
+
+    this.saveCurrentState = function(stateName, stateParams){
+      this.lastState.link = stateName;
+      this.lastState.params = stateParams;
+    };
+
+    this.getLastState = function(){
+      return this.lastState;
     };
 
 }

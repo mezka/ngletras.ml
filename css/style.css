@@ -6,7 +6,7 @@
 
 html {
   font-family: 'Varela Round', sans-serif;
-  font-size: 16px;
+  font-size: 20px;
   color: #D0D5E6; }
 
 body {
@@ -14,61 +14,164 @@ body {
   background-image: url("../img/squares.png");
   background-repeat: repeat; }
 
-a:visited {
+a,
+a:active,
+a:hover,
+a:link {
   color: #D0D5E6; }
+
+a:visited {
+  color: #E6E1D0; }
 
 .headerText {
   font-family: 'Grotesk Bold';
   text-decoration: none;
-  color: #D0E6E1 !important;
+  color: #D0D5E6 !important;
   text-align: center;
-  font-size: 2.8rem;
+  font-size: 3.5rem;
   font-weight: 550; }
 
 .searchBox {
+  margin: 10px auto 0;
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 50%;
-  margin: 0 auto 0 auto;
-  box-sizing: border-box;
-  padding: 10px 0px 10px 0px; }
-
-.searchBox > input {
-  width: 45%;
-  margin: auto; }
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center; }
+  .searchBox input {
+    flex-grow: 2;
+    min-width: 300px; }
+  .searchBox button {
+    flex-grow: 1;
+    height: 22px;
+    min-width: 300px; }
 
 .footer {
   position: fixed;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  height: 25px;
-  bottom: 0px;
+  height: 20px;
+  font-size: 12px;
+  bottom: 0;
   width: 100%;
   background-color: black;
   font-color: white;
   opacity: 0.4; }
 
-/*****************************************************************************/
-.song {
-  width: 50%;
+/********************************* home view **********************************/
+.homeContainer {
   display: flex;
-  margin: 10px auto 0px auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  min-height: 410px;
+  width: 100%; }
+  .homeContainer .titleContainer {
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; }
+    .homeContainer .titleContainer p {
+      display: inline-block; }
+    .homeContainer .titleContainer .welcome {
+      font-family: 'Arvo', serif;
+      font-size: 2.8rem;
+      font-weight: 700; }
+    .homeContainer .titleContainer .to {
+      font-family: 'Arvo', serif;
+      font-size: 2.3rem;
+      font-weight: 700; }
+    .homeContainer .titleContainer .letras {
+      color: #E6E1D0;
+      font-family: 'Grotesk Bold', sans-serif;
+      font-size: 3.5rem;
+      text-align: center; }
+  .homeContainer .introTextContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    max-width: 550px; }
+    .homeContainer .introTextContainer p {
+      text-align: justify; }
+
+/**********************************song view**********************************/
+.songWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+  justify-content: center;
+  min-height: 410px; }
+
+.song {
+  width: 90%;
+  display: flex;
+  margin: 5vh auto 0;
   justify-content: space-between; }
   .song .band {
     display: inline-block; }
   .song .title {
-    display: inline-block; }
+    display: inline-block;
+    text-align: right; }
 
-/*****************************************************************************/
+/*******************************lyrics view**********************************/
+.lyricsWrapper {
+  max-width: 100%;
+  margin-bottom: 20px; }
+
 .mainTitle {
   font-family: 'Grotesk Bold', sans-serif;
-  font-size: 2rem;
   text-align: center;
-  padding: 20px 0px 20px 0px;
+  padding: 15px 0;
   font-weight: 300; }
 
 .lyrics {
+  text-overflow: clip;
   font-family: 'Inconsolata', monospace;
-  text-align: center; }
+  text-align: center;
+  font-size: 0.75rem; }
+
+.languageMessage {
+  text-decoration: underline;
+  text-align: center;
+  font-size: 12px;
+  margin-top: 3px; }
+
+/********************************** media-queries --------------------------*/
+@media screen and (min-width: 768px) {
+  .searchBox > button, .searchBox > input {
+    min-width: 768px !important; }
+  /********************************** home *************************************/
+  .homeContainer {
+    min-height: 600px; }
+    .homeContainer .introTextContainer {
+      min-width: 700px; }
+    .homeContainer .titleContainer p {
+      display: inline-block; }
+    .homeContainer .titleContainer .welcome {
+      font-size: 4rem !important; }
+    .homeContainer .titleContainer .to {
+      font-size: 3rem !important; }
+    .homeContainer .titleContainer .letras {
+      font-size: 6rem !important; }
+  /******************************** songs ***************************************/
+  /******************************** lyrics *************************************/
+  .lyrics {
+    font-size: 1rem !important; }
+  .mainTitle {
+    font-size: 2rem; } }
+
+@media screen and (min-width: 1024px) {
+  .searchBox > button, .searchBox > input {
+    min-width: 1024px !important; }
+  .homeContainer {
+    min-height: 768px; }
+    .homeContainer .titleContainer p {
+      display: inline-block; }
+    .homeContainer .titleContainer .welcome {
+      font-size: 5rem !important; }
+    .homeContainer .titleContainer .to {
+      font-size: 3.66rem !important; }
+    .homeContainer .titleContainer .letras {
+      font-size: 8rem !important; } }

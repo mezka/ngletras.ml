@@ -1,2 +1,7 @@
-<h1 class="mainTitle" ng-show = "lyricsObj.band && lyricsObj.title">{{lyricsObj.band + ' - ' + lyricsObj.title}}</h1>
-<pre class="lyrics">{{lyricsObj.text}}</pre>
+<div class="lyricsWrapper">
+    <p class="languageMessage" ng-if="lyricsObj.br" ng-click="toggleBr()">{{languageMessage}}</p>
+    <h1 class="mainTitle" ng-show="lyricsObj.text">{{lyricsObj.band + ' - ' + lyricsObj.title}}</h1>
+    <h1 class="mainTitle" ng-show="!lyricsObj.text">Sorry, the song you looked up for wasn't found.</h1>
+    <pre class="lyrics" ng-show="!showBr">{{lyricsObj.text}}</pre>
+    <pre class="lyrics" ng-show="showBr">{{lyricsObj.br}}</pre>
+</div>

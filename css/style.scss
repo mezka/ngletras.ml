@@ -1,95 +1,253 @@
 @font-face {
     font-family: 'Grotesk Bold';
-    src: url('../fonts/altehaasgroteskbold-webfont.woff2') format('woff2'),
-         url('../fonts/altehaasgroteskbold-webfont.woff') format('woff');
+    src: url('../fonts/altehaasgroteskbold-webfont.woff2') format('woff2'), url('../fonts/altehaasgroteskbold-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
-
 }
 
-
-html{
-  font-family: 'Varela Round', sans-serif;
-  font-size: 16px;
-  color: #D0D5E6;
+html {
+    font-family: 'Varela Round', sans-serif;
+    font-size: 20px;
+    color: #D0D5E6;
 }
 
-body{
-  background-color: #001f17;
-  background-image: url("../img/squares.png");
-  background-repeat:repeat;
+body {
+    background-color: #001f17;
+    background-image: url("../img/squares.png");
+    background-repeat: repeat;
 }
 
-a:visited{
-  color: #D0D5E6;
+a,
+a:active,
+a:hover,
+a:link {
+    color: #D0D5E6;
 }
 
-.headerText{
-  font-family: 'Grotesk Bold';
-  text-decoration: none;
-  color: #D0E6E1 !important;
+a:visited {
+    color: #E6E1D0;
+}
+
+.headerText {
+    font-family: 'Grotesk Bold';
+    text-decoration: none;
+    color: #D0D5E6 !important;
+    text-align: center;
+    font-size: 3.5rem;
+    font-weight: 550;
+}
+
+.searchBox {
+    margin: 10px auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+    input {
+        flex-grow: 2;
+        min-width: 300px;
+    }
+
+    button {
+        flex-grow: 1;
+        height: 22px;
+        min-width: 300px;
+    }
+}
+
+.footer {
+    position: fixed;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 20px;
+    font-size: 12px;
+    bottom: 0;
+    width: 100%;
+    background-color: black;
+    font-color: white;
+    opacity: 0.4;
+}
+/********************************* home view **********************************/
+.homeContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    min-height: 410px;
+    width: 100%;
+
+    .titleContainer {
+        min-width: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        p {
+            display: inline-block;
+        }
+
+        .welcome {
+            font-family: 'Arvo', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+        }
+
+        .to {
+            font-family: 'Arvo', serif;
+            font-size: 2.3rem;
+            font-weight: 700;
+        }
+
+        .letras {
+            color: #E6E1D0;
+            font-family: 'Grotesk Bold', sans-serif;
+            font-size: 3.5rem;
+            text-align: center;
+        }
+    }
+
+    .introTextContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 90%;
+        max-width: 550px;
+
+        p {
+            text-align: justify;
+        }
+    }
+}
+/**********************************song view**********************************/
+.songWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: space-between;
+    justify-content: center;
+    min-height: 410px;
+}
+
+.song {
+    width: 90%;
+    display: flex;
+    margin: 5vh auto 0;
+    justify-content: space-between;
+
+    .band {
+        display: inline-block;
+    }
+
+    .title {
+        display: inline-block;
+        text-align: right;
+    }
+}
+/*******************************lyrics view**********************************/
+.lyricsWrapper {
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+
+.mainTitle {
+    font-family: 'Grotesk Bold', sans-serif;
+    text-align: center;
+    padding: 15px 0;
+    font-weight: 300;
+}
+
+.lyrics {
+    text-overflow: clip;
+    font-family: 'Inconsolata', monospace;
+    text-align: center;
+    font-size: 0.75rem;
+}
+
+.languageMessage{
+  text-decoration: underline;
   text-align: center;
-  font-size: 2.8rem;
-  font-weight: 550;
+  font-size: 12px;
+  margin-top: 3px;
 }
 
-.searchBox{
+/********************************** media-queries --------------------------*/
+@media screen and (min-width: 768px) {
 
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 50%;
-  margin: 0 auto 0 auto;
-  box-sizing: border-box;
-  padding: 10px 0px 10px 0px;
+.searchBox>button, .searchBox>input{
+    min-width: 768px !important;
 }
 
-.searchBox>input{
-  width: 45%;
-  margin: auto;
+/********************************** home *************************************/
+
+
+    .homeContainer {
+        min-height: 600px;
+
+        .introTextContainer {
+            min-width: 700px;
+            // font-size: 1.5rem;
+        }
+
+        .titleContainer {
+            p {
+                display: inline-block;
+            }
+
+            .welcome {
+                font-size: 4rem !important;
+            }
+
+            .to {
+                font-size: 3rem !important;
+            }
+
+            .letras {
+                font-size: 6rem !important;
+            }
+        }
+    }
+
+/******************************** songs ***************************************/
+
+/******************************** lyrics *************************************/
+.lyrics {
+    font-size: 1rem !important;
 }
 
-.footer{
-  position: fixed;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  height: 25px;
-  bottom: 0px;
-  width: 100%;
-  background-color: black;
-  font-color: white;
-  opacity: 0.4;
+.mainTitle {
+    font-size: 2rem;
 }
 
-/*****************************************************************************/
+}
 
-.song{
-  width: 50%;
-  display: flex;
-  margin: 10px auto 0px auto;
-  justify-content: space-between;
 
-  .band{
-    display: inline-block;
+@media screen and (min-width: 1024px) {
+
+  .searchBox>button , .searchBox>input{
+      min-width: 1024px !important;
   }
 
-  .title{
-    display: inline-block;
+  .homeContainer {
+      min-height: 768px;
+
+      .titleContainer {
+          p {
+              display: inline-block;
+          }
+
+          .welcome {
+              font-size: 5rem !important;
+          }
+
+          .to {
+              font-size: 3.66rem !important;
+          }
+
+          .letras {
+              font-size: 8rem !important;
+          }
+      }
   }
-}
-
-/*****************************************************************************/
-
-.mainTitle{
-  font-family: 'Grotesk Bold', sans-serif;
-  font-size: 2rem;
-  text-align: center;
-  padding: 20px 0px 20px 0px;
-  font-weight: 300;
-}
-
-.lyrics{
-  font-family: 'Inconsolata', monospace;
-  text-align: center;
 }

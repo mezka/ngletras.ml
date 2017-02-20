@@ -12,7 +12,7 @@ App.config(
 
         var songFoundState = {
             name: 'song',
-            url: '/song',
+            url: '/song{band, title}',
             params: {
                 band: null,
                 title: null
@@ -23,7 +23,7 @@ App.config(
 
         var lyricsFoundState = {
             name: 'lyrics',
-            url: '/lyrics',
+            url: '/lyrics{band, title}',
             params: {
                 band: null,
                 title: null
