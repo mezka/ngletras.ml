@@ -4,9 +4,8 @@ var sass = require('gulp-sass');
 
 
 gulp.task('css', function(){
-  gulp.src(['./node_modules/normalize/normalize.css','./css/style.scss'])
-  .pipe(concat('temp.scss'))
-  .pipe(sass('style.css'))
+  gulp.src(['./css/style.scss'])
+  .pipe(sass())
   .pipe(gulp.dest('./css/.'));
 });
 
@@ -18,6 +17,5 @@ gulp.task('js', function(){
 });
 
 
-gulp.task('default', ['css', 'js']);
-gulp.watch(['./js/*.js', './views/**/*.js'], ['js']);
+gulp.task('default', ['css']);
 gulp.watch(['./css/*.scss'], ['css']);

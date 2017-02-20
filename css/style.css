@@ -1,0 +1,74 @@
+@font-face {
+  font-family: 'Grotesk Bold';
+  src: url("../fonts/altehaasgroteskbold-webfont.woff2") format("woff2"), url("../fonts/altehaasgroteskbold-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
+
+html {
+  font-family: 'Varela Round', sans-serif;
+  font-size: 16px;
+  color: #D0D5E6; }
+
+body {
+  background-color: #001f17;
+  background-image: url("../img/squares.png");
+  background-repeat: repeat; }
+
+a:visited {
+  color: #D0D5E6; }
+
+.headerText {
+  font-family: 'Grotesk Bold';
+  text-decoration: none;
+  color: #D0E6E1 !important;
+  text-align: center;
+  font-size: 2.8rem;
+  font-weight: 550; }
+
+.searchBox {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 50%;
+  margin: 0 auto 0 auto;
+  box-sizing: border-box;
+  padding: 10px 0px 10px 0px; }
+
+.searchBox > input {
+  width: 45%;
+  margin: auto; }
+
+.footer {
+  position: fixed;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 25px;
+  bottom: 0px;
+  width: 100%;
+  background-color: black;
+  font-color: white;
+  opacity: 0.4; }
+
+/*****************************************************************************/
+.song {
+  width: 50%;
+  display: flex;
+  margin: 10px auto 0px auto;
+  justify-content: space-between; }
+  .song .band {
+    display: inline-block; }
+  .song .title {
+    display: inline-block; }
+
+/*****************************************************************************/
+.mainTitle {
+  font-family: 'Grotesk Bold', sans-serif;
+  font-size: 2rem;
+  text-align: center;
+  padding: 20px 0px 20px 0px;
+  font-weight: 300; }
+
+.lyrics {
+  font-family: 'Inconsolata', monospace;
+  text-align: center; }

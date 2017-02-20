@@ -3,20 +3,28 @@
 
 <head>
     <meta charset="utf-8">
-    <title>ng-letras</title>
+    <title>ngLetras</title>
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata|Varela+Round|Fredoka+One" rel="stylesheet">
+    <link rel="shortcut icon" href="favicon.ico?v=2">
 </head>
 
 <body ng-controller="MainController">
 
-    <h1>Lyrics Finder</h1>
+    <div class="main">
+      <a class="headerText" ui-sref="home"><h1>ngLetras</h1></a>
 
-    <form action="">
-        <input type="text" ng-model="searchObj.band" placeholder="Search for artist ...">
-        <input type="text" ng-model="searchObj.title" placeholder="Search for song ...">
-        <button ng-click = "search(searchObj.band, searchObj.title)">Search</button>
-    </form>
+      <form class="searchBox" action="">
+          <input type="text" ng-model="searchObj.band" placeholder="Search for artist ...">
+          <input type="text" ng-model="searchObj.title" placeholder="Search for song ...">
+          <button ng-click = "search(searchObj.band, searchObj.title)">Search</button>
+      </form>
 
-    <ui-view></ui-view>
+      <ui-view></ui-view>
+
+      <div class="footer">made by Emiliano Mesquita</div>
+    </div>
 
     <script src="./node_modules/angular/angular.js"></script>
     <script src="./node_modules/angular-ui-router/release/angular-ui-router.js"></script>
