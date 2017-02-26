@@ -97,12 +97,12 @@ a:visited {
       text-align: justify; }
 
 /**********************************song view**********************************/
-.failMessage {
+.queryFail {
   width: 90%;
   margin: 20px auto 0px auto;
   text-align: center; }
 
-.songWrapper {
+.lyricsContainer {
   display: flex;
   flex-direction: column;
   align-items: space-between;
@@ -122,7 +122,7 @@ a:visited {
 
 /*******************************lyrics view**********************************/
 .lyricsWrapper {
-  max-width: 100%;
+  width: 100%;
   margin-bottom: 20px; }
 
 .mainTitle {
@@ -132,7 +132,9 @@ a:visited {
   font-weight: 300; }
 
 .lyrics {
-  text-overflow: clip;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: wrap;
   font-family: 'Inconsolata', monospace;
   text-align: center;
   font-size: 0.75rem; }

@@ -10,12 +10,21 @@ App.config(
             templateUrl: './views/home/home.html'
         };
 
-        var songFoundState = {
-            name: 'song',
-            url: '/song{band, title}',
+        var searchBandState = {
+            name: 'band',
+            url: '/song/{band}',
             params: {
                 band: null,
-                title: null
+            },
+            templateUrl: './views/song/song.html',
+            controller: 'SongController'
+        };
+
+        var searchTitleState = {
+            name: 'title',
+            url: '/song/{title}',
+            params: {
+                title: null,
             },
             templateUrl: './views/song/song.html',
             controller: 'SongController'
@@ -23,7 +32,7 @@ App.config(
 
         var lyricsFoundState = {
             name: 'lyrics',
-            url: '/lyrics{band, title}',
+            url: '/lyrics/{band}/{title}',
             params: {
                 band: null,
                 title: null
@@ -36,7 +45,8 @@ App.config(
         $urlRouterProvider.otherwise('/404');
 
         $stateProvider.state(homeState);
-        $stateProvider.state(songFoundState);
+        $stateProvider.state(searchBandState);
+        $stateProvider.state(searchTitleState);
         $stateProvider.state(lyricsFoundState);
     });
 

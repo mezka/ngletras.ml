@@ -11,6 +11,7 @@ function LyricsController($scope, $stateParams, MainService) {
         $scope.lyricsObj.title = data.mus[0].name;
         $scope.lyricsObj.text = data.mus[0].text;
         $scope.lyricsObj.br = data.mus[0].translate[0].text;
+        MainService.saveSongStorage(lyricsObj);
     });
 
 

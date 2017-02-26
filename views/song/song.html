@@ -1,6 +1,8 @@
-<div class="failMessage" ng-if="!songs.length">Sorry, there were no matches for your query.</div>
-<div class="songWrapper">
-    <div class="song" ng-repeat="song in songs">
-        <div class="band">{{song.band}}</div><a ui-sref="lyrics({band: song.band, title: song.title})" class="title">{{song.title}}</a>
-    </div>
+<div class="songContainer" ng-switch="songs.length">
+      <div class="queryFail" ng-switch-when = "0">Sorry, there were no matches for your query.</div>
+      <div class="lyricsContainer" ng-switch-default>
+          <div class="song" ng-repeat="song in songs">
+              <div class="band">{{song.band}}</div><a ui-sref="lyrics({band: song.band, title: song.title})" class="title">{{song.title}}</a>
+          </div>
+      </div>
 </div>

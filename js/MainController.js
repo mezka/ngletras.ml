@@ -17,26 +17,26 @@ function MainController($scope, MainService, $state) {
 
     $scope.searchMessage = '';
 
-    $scope.search = function(artist, song) {
+    $scope.search = function(bandIn, titleIn){
 
         $scope.searchObj.clear();
 
-        if (!artist && !song) {
-            $scope.searchMessage = "Your query was empty, try again";
-        } else if (artist && song) {
+        if (!bandIn && !titleIn) {
+        } else if (bandIn && titleIn) {
             changeState('lyrics', {
-                band: artist,
-                title: song
+                band: bandIn,
+                title: titleIn
             });
-        } else {
-            changeState('song', {
-                band: artist,
-                title: song
+        }else if(!bandIn && titleIn){
+            changeState('title', {
+                title: titleIn
             });
+        }else{
+          changeState('band', {
+              band: bandIn
+          });
         }
     };
-
-
 }
 
 

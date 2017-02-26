@@ -10,12 +10,21 @@ App.config(
             templateUrl: './views/home/home.html'
         };
 
-        var songFoundState = {
-            name: 'song',
-            url: '/song{band, title}',
+        var searchBandState = {
+            name: 'band',
+            url: '/song/{band}',
             params: {
                 band: null,
-                title: null
+            },
+            templateUrl: './views/song/song.html',
+            controller: 'SongController'
+        };
+
+        var searchTitleState = {
+            name: 'title',
+            url: '/song/{title}',
+            params: {
+                title: null,
             },
             templateUrl: './views/song/song.html',
             controller: 'SongController'
@@ -23,7 +32,7 @@ App.config(
 
         var lyricsFoundState = {
             name: 'lyrics',
-            url: '/lyrics{band, title}',
+            url: '/lyrics/{band}/{title}',
             params: {
                 band: null,
                 title: null
@@ -36,7 +45,8 @@ App.config(
         $urlRouterProvider.otherwise('/404');
 
         $stateProvider.state(homeState);
-        $stateProvider.state(songFoundState);
+        $stateProvider.state(searchBandState);
+        $stateProvider.state(searchTitleState);
         $stateProvider.state(lyricsFoundState);
     });
 
@@ -64,26 +74,26 @@ function MainController($scope, MainService, $state) {
 
     $scope.searchMessage = '';
 
-    $scope.search = function(artist, song) {
+    $scope.search = function(bandIn, titleIn){
 
         $scope.searchObj.clear();
 
-        if (!artist && !song) {
-            $scope.searchMessage = "Your query was empty, try again";
-        } else if (artist && song) {
+        if (!bandIn && !titleIn) {
+        } else if (bandIn && titleIn) {
             changeState('lyrics', {
-                band: artist,
-                title: song
+                band: bandIn,
+                title: titleIn
             });
-        } else {
-            changeState('song', {
-                band: artist,
-                title: song
+        }else if(!bandIn && titleIn){
+            changeState('title', {
+                title: titleIn
             });
+        }else{
+          changeState('band', {
+              band: bandIn
+          });
         }
     };
-
-
 }
 
 
@@ -93,7 +103,6 @@ App.controller('MainController', MainController);
 
 function MainService($http, $log) {
 
-    this.lastState = {link: '/', params: null};
 
     this.htmlEncode = function htmlEncode(s) {
         var el = document.createElement("div");
@@ -149,38 +158,9 @@ function MainService($http, $log) {
             console.log("getSongsByTitleOrExcerpt failed, logging response.status: ", response.status);
       });
     };
-
-    this.saveCurrentState = function(stateName, stateParams){
-      this.lastState.link = stateName;
-      this.lastState.params = stateParams;
-    };
-
-    this.getLastState = function(){
-      return this.lastState;
-    };
-
 }
 
 angular.module('App').service('MainService', MainService);
-
-function SongController($scope, $stateParams, MainService){
-  console.log('Loading SongController...');
-
-  if($stateParams.band){
-    MainService.getArtistSongs($stateParams.band).then(function(data){
-      console.log(data);
-      $scope.songs = data.response.docs;
-    });
-  }else {
-    MainService.getSongsByTitleOrExcerpt($stateParams.title).then(function(data){
-      console.log(data);
-      $scope.songs = data.response.docs;
-    });
-  }
-}
-
-
-App.controller('SongController', SongController);
 
 function LyricsController($scope, $stateParams, MainService) {
     console.log('Loading LyricsController...');
@@ -195,6 +175,7 @@ function LyricsController($scope, $stateParams, MainService) {
         $scope.lyricsObj.title = data.mus[0].name;
         $scope.lyricsObj.text = data.mus[0].text;
         $scope.lyricsObj.br = data.mus[0].translate[0].text;
+        MainService.saveSongStorage(lyricsObj);
     });
 
 
@@ -210,3 +191,22 @@ function LyricsController($scope, $stateParams, MainService) {
 }
 
 App.controller('LyricsController', LyricsController);
+
+function SongController($scope, $stateParams, MainService){
+  console.log('Loading SongController...');
+
+
+
+  if($stateParams.band){
+    MainService.getArtistSongs($stateParams.band).then(function(data){
+      console.log(data.response);
+      $scope.songs = data.response.docs;
+    });
+  }else if($stateParams.title){
+    MainService.getSongsByTitleOrExcerpt($stateParams.title).then(function(data){
+      $scope.songs = data.response.docs;
+    });
+  }
+}
+
+App.controller('SongController', SongController);

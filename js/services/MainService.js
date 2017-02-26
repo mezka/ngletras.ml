@@ -1,6 +1,6 @@
 function MainService($http, $log) {
 
-    this.lastState = {link: '/', params: null};
+    var key = "68372f035a4d545c305c57647c620ffc";
 
     this.htmlEncode = function htmlEncode(s) {
         var el = document.createElement("div");
@@ -17,7 +17,7 @@ function MainService($http, $log) {
 
       return $http({
           method: 'GET',
-          url: 'https://api.vagalume.com.br/' + 'search.php?art=' + artist + '&mus=' + song + '&apikey={68372f035a4d545c305c57647c620ffc}'
+          url: 'https://api.vagalume.com.br/' + 'search.php?art=' + artist + '&mus=' + song + '&apikey={' + key + '}'
       }).then(function(response) {
           if (response.status === 200)
               return response.data;
@@ -56,16 +56,6 @@ function MainService($http, $log) {
             console.log("getSongsByTitleOrExcerpt failed, logging response.status: ", response.status);
       });
     };
-
-    this.saveCurrentState = function(stateName, stateParams){
-      this.lastState.link = stateName;
-      this.lastState.params = stateParams;
-    };
-
-    this.getLastState = function(){
-      return this.lastState;
-    };
-
 }
 
 angular.module('App').service('MainService', MainService);
