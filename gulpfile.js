@@ -18,5 +18,6 @@ gulp.task('js', function(){
 });
 
 
-gulp.task('default', ['css']);
+gulp.task('build', ['css', 'js']);
+
 gulp.watch(['./css/*.scss'], ['css']);
